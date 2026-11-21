@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: stayscout
       POSTGRES_USER: stay
-      POSTGRES_PASSWORD: stay_dev_pw
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -19,6 +19,7 @@ services:
     build: .
     environment:
       DB_HOST: postgres
+      DB_PASSWORD: ${DB_PASSWORD}
       REDIS_HOST: redis
       JWT_SECRET: ${JWT_SECRET}
     ports:

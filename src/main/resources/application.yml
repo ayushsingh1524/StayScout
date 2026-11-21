@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:5432/stayscout
     username: ${DB_USER:stay}
-    password: ${DB_PASSWORD:stay_dev_pw}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate

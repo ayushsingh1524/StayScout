@@ -6,6 +6,7 @@ Hotel search and booking API built with Java 21, Spring Boot, PostgreSQL, Redis,
 
 ```bash
 export JWT_SECRET='use-a-secure-secret-with-at-least-32-characters'
+export DB_PASSWORD='use-a-local-development-password'
 docker compose up --build
 ```
 
