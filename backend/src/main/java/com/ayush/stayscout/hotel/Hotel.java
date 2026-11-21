@@ -46,6 +46,14 @@ public class Hotel {
     protected Hotel() {
     }
 
+    public Hotel(String name, String city, String country, BigDecimal rating, String description) {
+        this.name = name;
+        this.city = city;
+        this.country = country;
+        this.rating = rating;
+        this.description = description;
+    }
+
     @PrePersist
     void initializeCreatedAt() {
         if (createdAt == null) {

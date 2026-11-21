@@ -1,3 +1,49 @@
 package com.ayush.stayscout.auth;
-import jakarta.servlet.*; import jakarta.servlet.http.*; import io.jsonwebtoken.*; import org.springframework.security.authentication.*; import org.springframework.security.core.authority.*; import org.springframework.security.core.context.*; import org.springframework.stereotype.*; import org.springframework.web.filter.OncePerRequestFilter;
-@Component public class JwtAuthFilter extends OncePerRequestFilter { final JwtService jwt; public JwtAuthFilter(JwtService j){jwt=j;} protected void doFilterInternal(HttpServletRequest r,HttpServletResponse s,FilterChain c)throws ServletException,java.io.IOException{String h=r.getHeader("Authorization");if(h!=null&&h.startsWith("Bearer "))try{Claims x=jwt.claims(h.substring(7));var a=new UsernamePasswordAuthenticationToken(x.getSubject(),null,AuthorityUtils.createAuthorityList("ROLE_"+x.get("role",String.class)));SecurityContextHolder.getContext().setAuthentication(a);}catch(JwtException e){s.setStatus(401);return;}c.doFilter(r,s);} }
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+@Component
+public class JwtAuthFilter extends OncePerRequestFilter {
+
+    private final JwtService jwt;
+
+    public JwtAuthFilter(JwtService jwt) {
+        this.jwt = jwt;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+        String authorization = request.getHeader("Authorization");
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            try {
+                Claims claims = jwt.claims(authorization.substring(7));
+                var authentication = new UsernamePasswordAuthenticationToken(
+                        claims.getSubject(),
+                        null,
+                        AuthorityUtils.createAuthorityList("ROLE_" + claims.get("role", String.class))
+                );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (JwtException exception) {
+                SecurityContextHolder.clearContext();
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.getWriter().write("{\"message\":\"Invalid or expired access token\"}");
+                return;
+            }
+        }
+        chain.doFilter(request, response);
+    }
+}

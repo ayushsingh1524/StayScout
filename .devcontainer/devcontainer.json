@@ -8,5 +8,5 @@
       "onAutoForward": "notify"
     }
   },
-  "postCreateCommand": "mvn -B -DskipTests compile"
+  "postCreateCommand": "cd backend && mvn -B -DskipTests compile"
 }

@@ -4,6 +4,7 @@ import com.ayush.stayscout.common.InvalidRequestException;
 import com.ayush.stayscout.common.ResourceNotFoundException;
 import com.ayush.stayscout.hotel.dto.HotelDetailResponse;
 import com.ayush.stayscout.hotel.dto.HotelSummaryResponse;
+import com.ayush.stayscout.hotel.dto.CreateHotelRequest;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 
 @Service
 public class HotelService {
@@ -75,5 +77,18 @@ public class HotelService {
         Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel " + id + " was not found"));
         return HotelDetailResponse.from(hotel);
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "hotelSearch", allEntries = true)
+    public HotelSummaryResponse create(CreateHotelRequest request) {
+        Hotel hotel = new Hotel(
+                request.name().trim(),
+                request.city().trim(),
+                request.country().trim(),
+                request.rating(),
+                request.description() == null ? null : request.description().trim()
+        );
+        return HotelSummaryResponse.from(hotelRepository.save(hotel));
     }
 }
