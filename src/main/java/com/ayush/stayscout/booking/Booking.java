@@ -53,6 +53,18 @@ public class Booking {
     protected Booking() {
     }
 
+    public Booking(User user, Room room, LocalDate checkIn, LocalDate checkOut, BigDecimal totalPrice) {
+        this.user = user;
+        this.room = room;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.totalPrice = totalPrice;
+    }
+
+    public void cancel() {
+        this.status = BookingStatus.CANCELLED;
+    }
+
     @PrePersist
     void initializeCreatedAt() {
         if (createdAt == null) {
