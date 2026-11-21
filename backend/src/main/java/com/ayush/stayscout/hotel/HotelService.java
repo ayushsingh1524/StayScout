@@ -5,6 +5,8 @@ import com.ayush.stayscout.common.ResourceNotFoundException;
 import com.ayush.stayscout.hotel.dto.HotelDetailResponse;
 import com.ayush.stayscout.hotel.dto.HotelSummaryResponse;
 import com.ayush.stayscout.hotel.dto.CreateHotelRequest;
+import com.ayush.stayscout.hotel.dto.CreateRoomRequest;
+import com.ayush.stayscout.hotel.dto.RoomResponse;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import java.math.BigDecimal;
@@ -22,9 +24,11 @@ import org.springframework.cache.annotation.CacheEvict;
 public class HotelService {
 
     private final HotelRepository hotelRepository;
+    private final RoomRepository roomRepository;
 
-    public HotelService(HotelRepository hotelRepository) {
+    public HotelService(HotelRepository hotelRepository, RoomRepository roomRepository) {
         this.hotelRepository = hotelRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Transactional(readOnly = true)
@@ -90,5 +94,14 @@ public class HotelService {
                 request.description() == null ? null : request.description().trim()
         );
         return HotelSummaryResponse.from(hotelRepository.save(hotel));
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "hotelSearch", allEntries = true)
+    public RoomResponse createRoom(Long hotelId, CreateRoomRequest request) {
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel " + hotelId + " was not found"));
+        Room room = new Room(hotel, request.roomType().trim(), request.pricePerNight(), request.capacity());
+        return RoomResponse.from(roomRepository.save(room));
     }
 }
