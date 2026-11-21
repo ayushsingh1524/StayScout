@@ -1,9 +1,6 @@
 {
   "name": "StayScout",
   "image": "mcr.microsoft.com/devcontainers/java:1-21-bookworm",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-  },
   "forwardPorts": [8080],
   "portsAttributes": {
     "8080": {
