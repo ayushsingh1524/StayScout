@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: stayscout
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/stayscout
+    username: ${DB_USER:stay}
+    password: ${DB_PASSWORD:stay_dev_pw}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
