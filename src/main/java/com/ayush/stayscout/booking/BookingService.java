@@ -29,12 +29,12 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingResponse create(CreateBookingRequest request) {
+    public BookingResponse create(CreateBookingRequest request, Long userId) {
         if (!request.checkOut().isAfter(request.checkIn())) {
             throw new InvalidRequestException("checkOut must be after checkIn");
         }
-        User user = userRepository.findById(request.userId())
-                .orElseThrow(() -> new ResourceNotFoundException("User " + request.userId() + " was not found"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Authenticated user was not found"));
         Room room = roomRepository.findById(request.roomId())
                 .orElseThrow(() -> new ResourceNotFoundException("Room " + request.roomId() + " was not found"));
         long nights = ChronoUnit.DAYS.between(request.checkIn(), request.checkOut());

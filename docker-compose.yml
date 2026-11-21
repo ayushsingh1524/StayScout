@@ -20,7 +20,7 @@ services:
     environment:
       DB_HOST: postgres
       REDIS_HOST: redis
-      JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-to-at-least-32-characters}
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8080:8080"
     depends_on:

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @RestController
 @RequestMapping("/bookings")
@@ -25,14 +26,14 @@ public class BookingController {
     public BookingController(BookingService bookingService) { this.bookingService = bookingService; }
 
     @PostMapping
-    public ResponseEntity<BookingResponse> create(@Valid @RequestBody CreateBookingRequest request) {
-        BookingResponse response = bookingService.create(request);
+    public ResponseEntity<BookingResponse> create(@Valid @RequestBody CreateBookingRequest request, @AuthenticationPrincipal String userId) {
+        BookingResponse response = bookingService.create(request, Long.valueOf(userId));
         return ResponseEntity.created(URI.create("/bookings/" + response.id())).body(response);
     }
     @GetMapping
-    public List<BookingResponse> list(@RequestParam @Min(1) Long userId) { return bookingService.findByUser(userId); }
+    public List<BookingResponse> list(@AuthenticationPrincipal String userId) { return bookingService.findByUser(Long.valueOf(userId)); }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancel(@PathVariable @Min(1) Long id, @RequestParam @Min(1) Long userId) {
-        bookingService.cancel(id, userId); return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> cancel(@PathVariable @Min(1) Long id, @AuthenticationPrincipal String userId) {
+        bookingService.cancel(id, Long.valueOf(userId)); return ResponseEntity.noContent().build();
     }
 }
