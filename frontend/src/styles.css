@@ -1,0 +1,1 @@
+body{font:16px system-ui;max-width:900px;margin:auto;padding:2rem}header{display:flex;justify-content:space-between}nav{display:flex;gap:1rem}form{display:grid;gap:1rem;max-width:360px}input,button{padding:.6rem}
