@@ -1,0 +1,23 @@
+.text-link, .back-link, .text-button { color: #0d4a42; font-size: .9rem; font-weight: 750; }
+.text-link:hover, .back-link:hover, .text-button:hover { color: #e85d4a; }
+.text-button { border: 0; background: transparent; cursor: pointer; padding: 8px 0 0; text-decoration: underline; }
+.hotel-detail { max-width: 1080px; margin: auto; }
+.back-link { display: inline-block; margin-bottom: 28px; }
+.detail-hero, .detail-grid { display: grid; grid-template-columns: 1fr .75fr; gap: 32px; align-items: stretch; }
+.detail-hero h1 { font-size: clamp(2.8rem, 6vw, 4.6rem); margin: 8px 0 14px; }
+.detail-subtitle { color: #0d4a42; font-weight: 700; }
+.detail-hero > div:first-child > p:last-child { color: #65717c; max-width: 580px; }
+.detail-art { min-height: 280px; border-radius: 28px; background: linear-gradient(145deg, #c4e5d2, #f2dfc9 55%, #d9d1fb); position: relative; overflow: hidden; }
+.detail-art:after { content: ''; position: absolute; width: 230px; height: 230px; background: #6657d9; opacity: .32; border-radius: 50%; bottom: -90px; right: -25px; }
+.detail-art span { position: absolute; top: 20px; right: 20px; z-index: 1; background: #fff; border-radius: 999px; padding: 8px 12px; font-weight: 750; }
+.detail-grid { margin-top: 52px; grid-template-columns: 1fr .7fr; align-items: start; }
+.detail-grid h2 { margin: 0 0 16px; font-size: 1.65rem; letter-spacing: -.04em; }
+.room-list { display: grid; gap: 12px; }
+.room-option { width: 100%; background: #fff; border: 1px solid #e7ded2; border-radius: 16px; padding: 18px; text-align: left; display: flex; justify-content: space-between; gap: 16px; cursor: pointer; font: inherit; color: #17202a; }
+.room-option:hover, .room-option.selected { border-color: #0d4a42; box-shadow: 0 0 0 2px #ddf3e8; }
+.room-option span, .room-option > strong { display: grid; gap: 4px; }
+.room-option small { color: #65717c; font-weight: 500; }
+.reserve-card { position: sticky; top: 100px; border: 1px solid #e7ded2; border-radius: 20px; padding: 22px; background: #fff; box-shadow: 0 18px 45px #17202a12; }
+.reserve-card .meta { margin: 14px 0 0; }
+.total { display: flex; justify-content: space-between; padding: 14px 0; margin: 0; border-top: 1px solid #e7ded2; border-bottom: 1px solid #e7ded2; }
+@media (max-width: 760px) { .detail-hero, .detail-grid { grid-template-columns: 1fr; } .detail-art { min-height: 200px; } .detail-grid { margin-top: 32px; } .reserve-card { position: static; } }
