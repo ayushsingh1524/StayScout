@@ -12,7 +12,17 @@ StayScout is a full-stack hotel discovery and booking application. Its original 
 
 The Codespace must be created or rebuilt from the current `.devcontainer` configuration before using Docker. It uses the standard Codespaces universal image, which includes Java, Node.js, and Docker. In an existing Codespace, run **Codespaces: Rebuild Container** once after pulling the latest `main` branch.
 
-Set runtime-only credentials in your shell (do not commit them), then start the stack from the repository root:
+Set runtime-only credentials in your shell (do not commit them), then start the stack from the repository root. The fastest secure option in Codespaces is:
+
+```bash
+export DB_PASSWORD="$(openssl rand -hex 24)"
+export JWT_SECRET="$(openssl rand -hex 48)"
+docker compose up --build
+```
+
+Alternatively, copy `.env.example` to `.env`, replace all placeholder values, and run `docker compose up --build`. The `.env` file is ignored by Git.
+
+To create an administrator account during the first start, use:
 
 ```bash
 export DB_PASSWORD='choose-a-long-local-password'
