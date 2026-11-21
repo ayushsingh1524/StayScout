@@ -48,7 +48,10 @@ public class HotelService {
         Specification<Hotel> specification = (root, query, builder) -> builder.conjunction();
         if (location != null && !location.isBlank()) {
             String requestedLocation = location.trim().toLowerCase(Locale.ROOT);
-            final String normalizedLocation = (requestedLocation.equals("bangalore") || requestedLocation.equals("bengaluru"))
+            final String normalizedLocation = (requestedLocation.equals("bangalore")
+                    || requestedLocation.equals("bengaluru")
+                    || requestedLocation.equals("bengalore")
+                    || requestedLocation.equals("banglore"))
                     ? "bengaluru"
                     : requestedLocation;
             final String pattern = "%" + normalizedLocation.replace("%", "\\%").replace("_", "\\_") + "%";
