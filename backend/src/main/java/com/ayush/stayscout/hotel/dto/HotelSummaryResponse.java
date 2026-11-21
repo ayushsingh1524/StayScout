@@ -8,7 +8,8 @@ public record HotelSummaryResponse(
         String name,
         String city,
         String country,
-        BigDecimal rating
+        BigDecimal rating,
+        String imageUrl
 ) {
     public static HotelSummaryResponse from(Hotel hotel) {
         return new HotelSummaryResponse(
@@ -16,7 +17,8 @@ public record HotelSummaryResponse(
                 hotel.getName(),
                 hotel.getCity(),
                 hotel.getCountry(),
-                hotel.getRating()
+                hotel.getRating(),
+                hotel.getImageUrl()
         );
     }
 }

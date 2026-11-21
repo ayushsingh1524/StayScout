@@ -11,6 +11,7 @@ public record HotelDetailResponse(
         String country,
         BigDecimal rating,
         String description,
+        String imageUrl,
         List<RoomResponse> rooms
 ) {
     public static HotelDetailResponse from(Hotel hotel) {
@@ -21,6 +22,7 @@ public record HotelDetailResponse(
                 hotel.getCountry(),
                 hotel.getRating(),
                 hotel.getDescription(),
+                hotel.getImageUrl(),
                 hotel.getRooms().stream().map(RoomResponse::from).toList()
         );
     }

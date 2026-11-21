@@ -47,7 +47,10 @@ public class HotelService {
 
         Specification<Hotel> specification = (root, query, builder) -> builder.conjunction();
         if (city != null && !city.isBlank()) {
-            String normalizedCity = city.trim().toLowerCase(Locale.ROOT);
+            String requestedCity = city.trim().toLowerCase(Locale.ROOT);
+            final String normalizedCity = (requestedCity.equals("bangalore") || requestedCity.equals("bengaluru"))
+                    ? "bengaluru"
+                    : requestedCity;
             specification = specification.and((root, query, builder) ->
                     builder.equal(builder.lower(root.get("city")), normalizedCity));
         }
