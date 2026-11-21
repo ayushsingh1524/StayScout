@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.Cacheable;
 
 @Service
 public class HotelService {
@@ -25,6 +26,7 @@ public class HotelService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "hotelSearch", key = "{#city,#minPrice,#maxPrice,#minRating,#page,#size}")
     public Page<HotelSummaryResponse> search(
             String city,
             BigDecimal minPrice,
