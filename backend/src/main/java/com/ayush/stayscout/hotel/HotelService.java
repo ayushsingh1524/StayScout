@@ -32,9 +32,9 @@ public class HotelService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "hotelSearch", key = "{#city,#minPrice,#maxPrice,#minRating,#page,#size}")
+    @Cacheable(cacheNames = "hotelSearch", key = "{#location,#minPrice,#maxPrice,#minRating,#page,#size}")
     public Page<HotelSummaryResponse> search(
-            String city,
+            String location,
             BigDecimal minPrice,
             BigDecimal maxPrice,
             BigDecimal minRating,
@@ -46,13 +46,16 @@ public class HotelService {
         }
 
         Specification<Hotel> specification = (root, query, builder) -> builder.conjunction();
-        if (city != null && !city.isBlank()) {
-            String requestedCity = city.trim().toLowerCase(Locale.ROOT);
-            final String normalizedCity = (requestedCity.equals("bangalore") || requestedCity.equals("bengaluru"))
+        if (location != null && !location.isBlank()) {
+            String requestedLocation = location.trim().toLowerCase(Locale.ROOT);
+            final String normalizedLocation = (requestedLocation.equals("bangalore") || requestedLocation.equals("bengaluru"))
                     ? "bengaluru"
-                    : requestedCity;
-            specification = specification.and((root, query, builder) ->
-                    builder.equal(builder.lower(root.get("city")), normalizedCity));
+                    : requestedLocation;
+            final String pattern = "%" + normalizedLocation.replace("%", "\\%").replace("_", "\\_") + "%";
+            specification = specification.and((root, query, builder) -> builder.or(
+                    builder.like(builder.lower(root.get("city")), pattern, '\\'),
+                    builder.like(builder.lower(root.get("country")), pattern, '\\')
+            ));
         }
         if (minRating != null) {
             specification = specification.and((root, query, builder) ->
