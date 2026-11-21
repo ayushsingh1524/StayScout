@@ -10,6 +10,8 @@ StayScout is a full-stack hotel discovery and booking application. Its original 
 
 ## Run the complete application with Docker
 
+The Codespace must be created or rebuilt from the current `.devcontainer` configuration before using Docker. It installs the Docker CLI/daemon and Node.js automatically. In an existing Codespace, run **Codespaces: Rebuild Container** once after pulling the latest `main` branch.
+
 Set runtime-only credentials in your shell (do not commit them), then start the stack from the repository root:
 
 ```bash
