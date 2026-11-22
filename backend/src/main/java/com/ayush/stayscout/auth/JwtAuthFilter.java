@@ -1,5 +1,7 @@
 package com.ayush.stayscout.auth;
 
+import com.ayush.stayscout.common.ApiError;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -7,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.OffsetDateTime;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -18,9 +21,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwt;
+    private final ObjectMapper objectMapper;
 
-    public JwtAuthFilter(JwtService jwt) {
+    public JwtAuthFilter(JwtService jwt, ObjectMapper objectMapper) {
         this.jwt = jwt;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -40,7 +45,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.clearContext();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.getWriter().write("{\"message\":\"Invalid or expired access token\"}");
+                objectMapper.writeValue(response.getOutputStream(), new ApiError(
+                        OffsetDateTime.now(),
+                        HttpServletResponse.SC_UNAUTHORIZED,
+                        "Unauthorized",
+                        "Invalid or expired access token",
+                        request.getRequestURI()
+                ));
                 return;
             }
         }
